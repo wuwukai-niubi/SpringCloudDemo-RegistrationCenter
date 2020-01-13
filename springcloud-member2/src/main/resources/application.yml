@@ -1,0 +1,60 @@
+###服务启动端口号
+server:
+  ###集群 8002 ， 8012
+  port: 8012
+###服务名称(服务注册到eureka名称)
+spring:
+  application:
+    name: eureka-member
+###服务注册到eureka地址
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:8001/eureka,http://127.0.0.1:8011/eureka
+
+    ###因为该应用为注册中心，不会注册自己
+    register-with-eureka: true
+    ###是否需要从eureka上获取注册信息
+    fetch-registry: true
+  ###心跳检测与续约时间
+  ###本地开发测试时将值设置小，保证服务关闭后注册中心能及时剔除服务
+  ###本地负载均衡ribbon会有30s缓存，如果及时剔除，还会访问到
+  instance:
+    ###Eureka客户端向服务端发送心跳时间间隔，单位为秒
+    lease-renewal-interval-in-seconds: 1
+    ###Eureka服务端在收到最后一次心跳之后等待的时间上限，单位为秒超过则剔除
+    lease-expiration-duration-in-seconds: 2
+
+#Zookeeper注册服务配置 集群
+#server:
+#  port: 8002
+####服务别名----服务注册到注册中心名称
+#spring:
+#  application:
+#    name: zk-member
+#  cloud:
+#    zookeeper:
+#      connect-string: 127.0.0.1:2181
+
+#Consul注册服务配置
+#server:
+#  port: 8502
+#spring:
+#  application:
+#    name: consul-member
+#  ####consul注册中心地址
+#  cloud:
+#    consul:
+#      host: 127.0.0.1
+#      port: 8500
+#      discovery:
+#        ###配置这个服务的ip地址
+#        hostname: 127.0.0.1
+#        ###服务健康值检测，默认为false，检测不通过导致服务调用不了，200为通过，暂时关闭健康检测
+#        heartbeat:
+#          enabled: true
+
+###在springboot2.1之后使用spring framework5.1 对日志info级别记录少，debug级别多但不详细，所以打印mapping url需要设置TRACE级别
+###logging:
+###  level:
+###    org.springframework.web: TRACE
